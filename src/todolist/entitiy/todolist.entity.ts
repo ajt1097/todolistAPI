@@ -1,12 +1,11 @@
 import {
-  Cascade,
   Collection,
   Entity,
   OneToMany,
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
-import { Item } from '../item/item.entity';
+import { Item } from './item.entity';
 
 @Entity()
 export class Todolist {
@@ -19,14 +18,21 @@ export class Todolist {
   @Property()
   content: string;
 
-  @OneToMany({
-    entity: () => Item,
-    mappedBy: 'list',
-  })
-  list = new Collection<Item>(this);
+  @Property()
+  createdAt = new Date();
+
+  @Property({ onUpdate: () => new Date() })
+  updatedAt = new Date();
+
+  @Property()
+  deletedAt: null | Date;
+
+  @OneToMany(() => Item, (item) => item.list)
+  items = new Collection<Item>(this);
 
   constructor(title: string, content: string) {
     this.title = title;
     this.content = content;
+    this.deletedAt = null;
   }
 }
