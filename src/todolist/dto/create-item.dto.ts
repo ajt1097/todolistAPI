@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateItemDto {
+export class ItemDto {
   @ApiProperty()
   readonly name: string;
 
