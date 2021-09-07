@@ -1,5 +1,13 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
+import { ITEM_QUERY_SERVICE_SYMBOL } from './application/query/ItemQuery.service.interface';
+import { TODOLIST_QUERY_SERVICE_SYMBOL } from './application/query/TodolistQuery.service.interface';
+import { CreateItem } from './application/usecase/createItem';
+import { CreateTodolist } from './application/usecase/createTodolist';
+import { DeleteItem } from './application/usecase/deleteItem';
+import { DeleteTodolist } from './application/usecase/deleteTodolist';
+import { UpdateItem } from './application/usecase/updateItem';
+import { UpdateTodolist } from './application/usecase/updateTodolist';
 import { CreateItemController } from './controller/createItem.controller';
 import { CreateTodolistController } from './controller/createTodolist.controller';
 import { DeleteItemController } from './controller/deleteItem.controller';
@@ -13,6 +21,8 @@ import { ITEM_REPOSITORY_SYMBOL } from './domain/repositoryInterface/item.reposi
 import { TODOLIST_REPOSITORY_SYMBOL } from './domain/repositoryInterface/todolist.repository.interface';
 import { ItemEntityMapping } from './infra/mapping/itemEntity.mapping';
 import { TodolistEntityMapping } from './infra/mapping/todolistEntity.mapping';
+import { ItemQueryService } from './infra/query/ItemQuery.service';
+import { TodolistQueryService } from './infra/query/TodolistQuery.service';
 import { ItemRepository } from './infra/repository/item.repository';
 import { TodolistRepository } from './infra/repository/todolist.repository';
 
@@ -28,6 +38,20 @@ const controllers = [
   UpdateTodolistController,
 ];
 
+const services = [
+  { provide: TODOLIST_QUERY_SERVICE_SYMBOL, useClass: TodolistQueryService },
+  { provide: ITEM_QUERY_SERVICE_SYMBOL, useClass: ItemQueryService },
+];
+
+const useCases = [
+  CreateTodolist,
+  DeleteTodolist,
+  UpdateTodolist,
+  CreateItem,
+  UpdateItem,
+  DeleteItem,
+];
+
 const mappings = [ItemEntityMapping, TodolistEntityMapping];
 
 const repositories = [
@@ -38,6 +62,6 @@ const repositories = [
 @Module({
   imports: [MikroOrmModule.forRoot()],
   controllers: [...controllers],
-  providers: [...mappings, ...repositories],
+  providers: [...mappings, ...repositories, ...useCases, ...services],
 })
 export class AppModule {}

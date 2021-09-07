@@ -1,11 +1,20 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Inject, Param } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  IItemQueryService,
+  ITEM_QUERY_SERVICE_SYMBOL,
+} from '@src/application/query/ItemQuery.service.interface';
 
 @Controller('todolist')
 export class GetItemsController {
-  constructor() {}
+  constructor(
+    @Inject(ITEM_QUERY_SERVICE_SYMBOL)
+    private readonly queryService: IItemQueryService,
+  ) {}
   @ApiTags('To Do List')
   @ApiOperation({ summary: 'Get items in todolist' })
   @Get('item/:id')
-  async getItems() {}
+  async getItems(@Param('id') todolistId: string) {
+    return this.queryService.getAllItem(todolistId);
+  }
 }

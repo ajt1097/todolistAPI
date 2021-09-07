@@ -13,8 +13,6 @@ export class UpdateTodolist {
   ) {}
 
   async execute(id: string, data): Promise<void> {
-    const target = await this.todolistRepository.findOne({ id });
-    wrap(target).assign(data);
-    await this.todolistRepository.flush();
+    await this.todolistRepository.update(id, data);
   }
 }
