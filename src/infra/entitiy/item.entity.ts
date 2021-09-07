@@ -1,6 +1,7 @@
 import {
   ArrayType,
   Entity,
+  IdentifiedReference,
   ManyToOne,
   PrimaryKey,
   Property,
@@ -28,5 +29,5 @@ export class ItemEntity {
   tags: string[] = [];
 
   @ManyToOne()
-  list: TodolistEntity;
+  list: IdentifiedReference<TodolistEntity>;
 }

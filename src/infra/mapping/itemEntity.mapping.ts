@@ -3,7 +3,7 @@ import { ItemFactory } from '@src/domain/factory/item.factory';
 import { ItemEntity } from '../entitiy/item.entity';
 
 export class ItemEntityMapping {
-  toDomain(entity: ItemEntity): Item {
+  static toDomain(entity: ItemEntity): Item {
     return ItemFactory.reconstitute(
       entity.id,
       entity.name,
@@ -14,7 +14,7 @@ export class ItemEntityMapping {
     );
   }
 
-  toEntity(domain: Item, entity: ItemEntity): ItemEntity {
+  static toEntity(domain: Item, entity: ItemEntity): ItemEntity {
     entity.id = domain.id;
     entity.name = domain.name;
     entity.createdAt = domain.createdAt;
